@@ -1,3 +1,4 @@
+<!-- todo: fix date timezone issue exceljs -->
 <script async setup>
 import * as ExcelJS from 'exceljs'
 import excel from '../../assets/sppd.xlsx'
@@ -37,32 +38,67 @@ async function save() {
   tanggal._rawValue.forEach(async date => {
     await cread(workbook, date)
   })
-}
 
-async function cread(workbook, date) {
-  const ws = workbook.getWorksheet('Surat tugas 1 org')
-  ws.getCell('E13').value = nama.value
-  ws.getCell('E14').value = nip.value
-  ws.getCell('E15').value = golongan.value
-  ws.getCell('E16').value = jabatan.value
-  ws.getCell('E23').value = date
-  ws.getCell('E24').value = tujuan.value
-  ws.getCell('E25').value = alamat.value
-
-  // filen name
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
-
+  // flush
+  workbook.removeWorksheet(workbook.getWorksheet('surat_tugas').id);
+  workbook.removeWorksheet(workbook.getWorksheet('sppd_depan').id);
+  workbook.removeWorksheet(workbook.getWorksheet('sppd_belakang').id);
+  
   const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `sppd ${nama.value} ${day}-${month}-${year}`
+  link.download = `sppd ${nama.value}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
+}
+
+async function cread(workbook, date) {
+  // filen name
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
+  const ws = workbook.getWorksheet('data')
+  ws.getCell('B1').value = nama.value
+  ws.getCell('B2').value = nip.value
+  ws.getCell('B3').value = golongan.value
+  ws.getCell('B4').value = jabatan.value
+  ws.getCell('B5').value = date
+  ws.getCell('B6').value = tujuan.value
+  ws.getCell('B7').value = alamat.value
+
+  // cp surat tugas
+  const surat_tugas = workbook.getWorksheet('surat_tugas');
+  let cp_surat_tugas = workbook.addWorksheet('cp');
+
+  cp_surat_tugas.model = Object.assign(surat_tugas.model, {
+    mergeCells: surat_tugas.model.merges
+  });
+  cp_surat_tugas.name = `surat_tugas ${day}-${month}-${year}`;
+  cp_surat_tugas.getCell('E23').value = date
+
+  // cp sppd_depan
+  const sppd_depan = workbook.getWorksheet('sppd_depan');
+  let cp_sppd_depan = workbook.addWorksheet('cp');
+
+  cp_sppd_depan.model = Object.assign(sppd_depan.model, {
+    mergeCells: sppd_depan.model.merges
+  });
+  cp_sppd_depan.name = `sppd_depan ${day}-${month}-${year}`;
+  cp_sppd_depan.getCell('D22').value = date
+
+  // cp sppd_belakang
+  const sppd_belakang = workbook.getWorksheet('sppd_belakang');
+  let cp_sppd_belakang = workbook.addWorksheet('cp');
+
+  cp_sppd_belakang.model = Object.assign(sppd_belakang.model, {
+    mergeCells: sppd_belakang.model.merges
+  });
+  cp_sppd_belakang.name = `sppd_belakang ${day}-${month}-${year}`;
+  cp_sppd_belakang.getCell('F7').value = date
 }
 </script>
 
@@ -90,7 +126,7 @@ async function cread(workbook, date) {
     <div class="grid gap-6 mb-6 md:grid-cols-2">
       <div class="mb-6">
         <label for="tanggal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal</label>
-        <VueDatePicker id="tanggal" name="tanggal" v-model="tanggal" text-input multi-dates :enable-time-picker="false" placeholder="mm/dd/yyyyy;" required/>
+        <VueDatePicker id="tanggal" name="tanggal" v-model="tanggal" text-input multi-dates :enable-time-picker="false" auto-apply :close-on-auto-apply="false" placeholder="mm/dd/yyyyy;" required/>
       </div> 
       <div class="mb-6">
         <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
