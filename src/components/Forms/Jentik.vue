@@ -4,12 +4,14 @@ import excel from '../../assets/sppd.xlsx'
 import axios from 'axios'
 import { Buffer } from 'buffer'
 import { ref } from 'vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const nama = ref('')
 const nip = ref('')
 const golongan = ref('')
 const jabatan = ref('')
-const tanggal = ref('')
+const tanggal = ref()
 const alamat = ref('')
 const tujuan = ref('')
 
@@ -25,29 +27,42 @@ async function getResponseAsBuffer(url) {
 }
 
 async function save() {
+  if (tanggal._rawValue === null) {
+    return
+  }
+  
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(await getResponseAsBuffer(excel))
 
+  tanggal._rawValue.forEach(async date => {
+    await cread(workbook, date)
+  })
+}
+
+async function cread(workbook, date) {
   const ws = workbook.getWorksheet('Surat tugas 1 org')
   ws.getCell('E13').value = nama.value
   ws.getCell('E14').value = nip.value
   ws.getCell('E15').value = golongan.value
   ws.getCell('E16').value = jabatan.value
-  ws.getCell('E23').value = tanggal.value
+  ws.getCell('E23').value = date
   ws.getCell('E24').value = tujuan.value
   ws.getCell('E25').value = alamat.value
+
+  // filen name
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
 
   const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `sppd ${nama.value}.xlsx`
+  link.download = `sppd ${nama.value} ${day}-${month}-${year}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-
-  busy.value = false
 }
 </script>
 
@@ -75,7 +90,7 @@ async function save() {
     <div class="grid gap-6 mb-6 md:grid-cols-2">
       <div class="mb-6">
         <label for="tanggal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal</label>
-        <input v-model="tanggal" type="text" id="tanggal" name="tanggal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="dd-mm-yyyyy" required>
+        <VueDatePicker id="tanggal" name="tanggal" v-model="tanggal" text-input multi-dates :enable-time-picker="false" placeholder="mm/dd/yyyyy;" required/>
       </div> 
       <div class="mb-6">
         <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
