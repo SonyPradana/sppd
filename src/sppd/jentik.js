@@ -2,7 +2,7 @@ import * as ExcelJS from 'exceljs'
 import excel from '../assets/sppd.xlsx'
 import '@vuepic/vue-datepicker/dist/main.css'
 import dayjs from 'dayjs'
-import getResponseAsBuffer from '/buffer'
+import { getResponseAsBuffer } from './buffer'
 
 /**
  * 
