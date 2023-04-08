@@ -1,4 +1,3 @@
-<!-- todo: fix date timezone issue exceljs -->
 <script async setup>
 import * as ExcelJS from 'exceljs'
 import excel from '../../assets/sppd.xlsx'
@@ -7,6 +6,7 @@ import { Buffer } from 'buffer'
 import { ref } from 'vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import * as dayjs from 'dayjs'
 
 const nama = ref('')
 const nip = ref('')
@@ -66,39 +66,42 @@ async function cread(workbook, date) {
   ws.getCell('B2').value = nip.value
   ws.getCell('B3').value = golongan.value
   ws.getCell('B4').value = jabatan.value
-  ws.getCell('B5').value = date
+  // ws.getCell('B5').value = date
   ws.getCell('B6').value = tujuan.value
   ws.getCell('B7').value = alamat.value
 
   // cp surat tugas
-  const surat_tugas = workbook.getWorksheet('surat_tugas');
-  let cp_surat_tugas = workbook.addWorksheet('cp');
+  const surat_tugas = workbook.getWorksheet('surat_tugas')
+  let cp_surat_tugas = workbook.addWorksheet('cp')
 
   cp_surat_tugas.model = Object.assign(surat_tugas.model, {
     mergeCells: surat_tugas.model.merges
-  });
-  cp_surat_tugas.name = `surat_tugas ${day}-${month}-${year}`;
-  cp_surat_tugas.getCell('E23').value = date
+  })
+  cp_surat_tugas.name = `surat_tugas ${day}-${month}-${year}`
+  cp_surat_tugas.getCell('E23').value = dayjs(date).format('DD MMMM YYYY')
+  cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy@'
 
   // cp sppd_depan
-  const sppd_depan = workbook.getWorksheet('sppd_depan');
-  let cp_sppd_depan = workbook.addWorksheet('cp');
+  const sppd_depan = workbook.getWorksheet('sppd_depan')
+  let cp_sppd_depan = workbook.addWorksheet('cp')
 
   cp_sppd_depan.model = Object.assign(sppd_depan.model, {
     mergeCells: sppd_depan.model.merges
-  });
-  cp_sppd_depan.name = `sppd_depan ${day}-${month}-${year}`;
-  cp_sppd_depan.getCell('D22').value = date
+  })
+  cp_sppd_depan.name = `sppd_depan ${day}-${month}-${year}`
+  cp_sppd_depan.getCell('D22').value = dayjs(date).format('DD MMMM YYYY')
+  cp_sppd_depan.getCell('D22').numFmt = '[$-id-ID]dd mmmm yyyy@'
 
   // cp sppd_belakang
-  const sppd_belakang = workbook.getWorksheet('sppd_belakang');
-  let cp_sppd_belakang = workbook.addWorksheet('cp');
+  const sppd_belakang = workbook.getWorksheet('sppd_belakang')
+  let cp_sppd_belakang = workbook.addWorksheet('cp')
 
   cp_sppd_belakang.model = Object.assign(sppd_belakang.model, {
     mergeCells: sppd_belakang.model.merges
   });
   cp_sppd_belakang.name = `sppd_belakang ${day}-${month}-${year}`;
-  cp_sppd_belakang.getCell('F7').value = date
+  cp_sppd_belakang.getCell('F7').value = dayjs(date).format('DD MMMM YYYY')
+  cp_sppd_belakang.getCell('F7').numFmt = '[$-id-ID]dd mmmm yyyy;@'
 }
 </script>
 
