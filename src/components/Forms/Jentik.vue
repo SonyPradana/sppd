@@ -56,10 +56,7 @@ async function save() {
 }
 
 async function cread(workbook, date) {
-  // filen name
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
+  const formated_date = dayjs(date).format('DD MMMM YYYY')
 
   const ws = workbook.getWorksheet('data')
   ws.getCell('B1').value = nama.value
@@ -77,8 +74,8 @@ async function cread(workbook, date) {
   cp_surat_tugas.model = Object.assign(surat_tugas.model, {
     mergeCells: surat_tugas.model.merges
   })
-  cp_surat_tugas.name = `surat_tugas ${day}-${month}-${year}`
-  cp_surat_tugas.getCell('E23').value = dayjs(date).format('DD MMMM YYYY')
+  cp_surat_tugas.name = `surat_tugas ${formated_date}`
+  cp_surat_tugas.getCell('E23').value = formated_date
   cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy@'
 
   // cp sppd_depan
@@ -88,8 +85,8 @@ async function cread(workbook, date) {
   cp_sppd_depan.model = Object.assign(sppd_depan.model, {
     mergeCells: sppd_depan.model.merges
   })
-  cp_sppd_depan.name = `sppd_depan ${day}-${month}-${year}`
-  cp_sppd_depan.getCell('D22').value = dayjs(date).format('DD MMMM YYYY')
+  cp_sppd_depan.name = `sppd_depan ${formated_date}`
+  cp_sppd_depan.getCell('D22').value = formated_date
   cp_sppd_depan.getCell('D22').numFmt = '[$-id-ID]dd mmmm yyyy@'
 
   // cp sppd_belakang
@@ -99,8 +96,8 @@ async function cread(workbook, date) {
   cp_sppd_belakang.model = Object.assign(sppd_belakang.model, {
     mergeCells: sppd_belakang.model.merges
   });
-  cp_sppd_belakang.name = `sppd_belakang ${day}-${month}-${year}`;
-  cp_sppd_belakang.getCell('F7').value = dayjs(date).format('DD MMMM YYYY')
+  cp_sppd_belakang.name = `sppd_belakang ${formated_date}`;
+  cp_sppd_belakang.getCell('F7').value = formated_date
   cp_sppd_belakang.getCell('F7').numFmt = '[$-id-ID]dd mmmm yyyy;@'
 }
 </script>
