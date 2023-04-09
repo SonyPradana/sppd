@@ -9,7 +9,7 @@ import { getResponseAsBuffer } from './buffer'
  * @param {object} dates 
  * @param {object} data 
  */
-async function save(dates, data) {
+async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   if (dates._rawValue === null) {
     return
   }
@@ -18,7 +18,7 @@ async function save(dates, data) {
   await workbook.xlsx.load(await getResponseAsBuffer(excel))
 
   dates._rawValue.forEach(async date => {
-    await create(workbook, date, data)
+    await create(workbook, date, {nama, nip, golongan, jabatan, tujuan, alamat})
   })
 
   // flush
@@ -33,7 +33,7 @@ async function save(dates, data) {
   
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `sppd ${data.nama}`
+  link.download = `sppd ${nama}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -46,20 +46,19 @@ async function save(dates, data) {
  * @param {Date} date 
  * @param {object} data 
  */
-async function create(workbook, date, data) {
+async function create(workbook, date, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   // filen name
   const day = date.getDate()
   const month = date.getMonth() + 1
   const year = date.getFullYear()
 
   const ws = workbook.getWorksheet('data')
-  ws.getCell('B1').value = data.nama
-  ws.getCell('B2').value = data.nip
-  ws.getCell('B3').value = data.golongan
-  ws.getCell('B4').value = data.jabatan
-  // ws.getCell('B5').value = date
-  ws.getCell('B6').value = data.tujuan
-  ws.getCell('B7').value = data.alamat
+  ws.getCell('B1').value = nama
+  ws.getCell('B2').value = nip
+  ws.getCell('B3').value = golongan
+  ws.getCell('B4').value = jabatan
+  ws.getCell('B6').value = tujuan
+  ws.getCell('B7').value = alamat
 
   // cp surat tugas
   const surat_tugas = workbook.getWorksheet('surat_tugas')
@@ -70,7 +69,7 @@ async function create(workbook, date, data) {
   })
   cp_surat_tugas.name = `surat_tugas ${day}-${month}-${year}`
   cp_surat_tugas.getCell('E23').value = dayjs(date).format('DD MMMM YYYY')
-  cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy@'
+  cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy;@'
 
   // cp sppd_depan
   const sppd_depan = workbook.getWorksheet('sppd_depan')
@@ -81,7 +80,7 @@ async function create(workbook, date, data) {
   })
   cp_sppd_depan.name = `sppd_depan ${day}-${month}-${year}`
   cp_sppd_depan.getCell('D22').value = dayjs(date).format('DD MMMM YYYY')
-  cp_sppd_depan.getCell('D22').numFmt = '[$-id-ID]dd mmmm yyyy@'
+  cp_sppd_depan.getCell('D22').numFmt = '[$-id-ID]dd mmmm yyyy;@'
 
   // cp sppd_belakang
   const sppd_belakang = workbook.getWorksheet('sppd_belakang')
