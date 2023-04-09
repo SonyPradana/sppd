@@ -2,10 +2,14 @@
 import Jentik from './components/Forms/Jentik.vue'
 </script>
 
-<template>
-  <h1 class="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-950 dark:text-gray-300 md:text-5xl lg:text-6xl ">SPPD Maker</h1>
-  <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Alat untuk membuat sppd otomatis.</p>
-
-  <h1>500 - Dalam Pengembangan</h1>
+<template>         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0"> 
+             <div class="max-w-xl mx-auto sm:px-6 lg:px-8"> 
+                 <div class="flex items-center pt-8 sm:justify-start sm:pt-0"> 
+                     <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">500</div> 
+  
+                     <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">Dalam Pengembang</div> 
+                 </div> 
+             </div> 
+         </div>
 </template>
 
