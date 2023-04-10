@@ -32,7 +32,7 @@ async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `sppd ${nama}`
+  link.download = `sppd ${nama[1]}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -50,13 +50,18 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
   const date = dayjs(tanggal).format('DD MMMM YYYY')
 
   const ws = workbook.getWorksheet('data')
-  ws.getCell('B1').value = nama
-  ws.getCell('B2').value = nip
-  ws.getCell('B3').value = golongan
-  ws.getCell('B4').value = jabatan
-  ws.getCell('B6').value = tujuan
-  ws.getCell('B7').value = alamat
-
+  ws.getCell('B1').value = nama[1] ?? ''
+  ws.getCell('B2').value = nip[1] ?? ''
+  ws.getCell('B3').value = golongan[1] ?? ''
+  ws.getCell('B4').value = jabatan[1] ?? ''
+  ws.getCell('B6').value = tujuan[1] ?? ''
+  ws.getCell('B7').value = alamat[1] ?? ''
+  // 
+  ws.getCell('C1').value = nama[2] ?? ''
+  ws.getCell('C2').value = nip[2] ?? ''
+  ws.getCell('C3').value = golongan[2] ?? ''
+  ws.getCell('C4').value = jabatan[2] ?? ''
+  
   // cp surat tugas
   const surat_tugas = workbook.getWorksheet('surat_tugas')
   let cp_surat_tugas = workbook.addWorksheet('cp')
@@ -65,8 +70,16 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
     mergeCells: surat_tugas.model.merges
   })
   cp_surat_tugas.name = `surat_tugas ${short_date}`
-  cp_surat_tugas.getCell('E23').value = date
+  cp_surat_tugas.getCell('E23').value   = date
   cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy;@'
+  // remove unsed cell
+  if (nama[2] === '') {
+    cp_surat_tugas.getCell('C40').value = ''
+    cp_surat_tugas.getCell('C41').value = ''
+    cp_surat_tugas.getCell('D40').value = ''
+    cp_surat_tugas.getCell('D41').value = ''
+    cp_surat_tugas.getCell('F41').value = ''
+  }
 
   // cp sppd_depan
   const sppd_depan = workbook.getWorksheet('sppd_depan')
