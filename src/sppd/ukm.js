@@ -12,7 +12,7 @@ dayjs.locale('id')
  * @param {object} data 
  */
 async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
-  if (dates._rawValue === null) {
+  if (dates._rawValue === null || dates._rawValue === undefined || dates._rawValue === []) {
     return
   }
   
@@ -76,7 +76,7 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
   cp_surat_tugas.getCell('E23').value   = date
   cp_surat_tugas.getCell('E23').numFmt = '[$-id-ID]dd mmmm yyyy;@'
   // remove unsed cell
-  if (nama[2] === '') {
+  if (nama[2] === undefined) {
     cp_surat_tugas.getCell('C40').value = ''
     cp_surat_tugas.getCell('C41').value = ''
     cp_surat_tugas.getCell('D40').value = ''

@@ -8,9 +8,9 @@ const nama = ref([])
 const nip = ref([])
 const golongan = ref([])
 const jabatan = ref([])
-const tanggal = ref()
-const alamat = ref([])
-const tujuan = ref([])
+const tanggal = ref([])
+const alamat = ref('')
+const tujuan = ref('')
 const multy = ref(false)
 
 function isMulty(e) {
