@@ -2,6 +2,9 @@ import * as ExcelJS from 'exceljs'
 import excel from '../assets/sppd.xlsx'
 import dayjs from 'dayjs'
 import { getResponseAsBuffer } from './buffer'
+import 'dayjs/locale/id'
+
+dayjs.locale('id')
 
 /**
  * 
@@ -15,7 +18,7 @@ async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(await getResponseAsBuffer(excel))
-
+  
   dates._rawValue.forEach(async date => {
     await create(workbook, date, {nama, nip, golongan, jabatan, tujuan, alamat})
   })
@@ -54,8 +57,8 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
   ws.getCell('B2').value = nip[1] ?? ''
   ws.getCell('B3').value = golongan[1] ?? ''
   ws.getCell('B4').value = jabatan[1] ?? ''
-  ws.getCell('B6').value = tujuan[1] ?? ''
-  ws.getCell('B7').value = alamat[1] ?? ''
+  ws.getCell('B6').value = tujuan ?? ''
+  ws.getCell('B7').value = alamat ?? ''
   // 
   ws.getCell('C1').value = nama[2] ?? ''
   ws.getCell('C2').value = nip[2] ?? ''
