@@ -30,7 +30,7 @@ async function download() {
 </script>
 
 <template>
-  
+
   <form>
     <div class="grid gap-6 mb-6 md:grid-cols-2">
       <div>
@@ -47,7 +47,7 @@ async function download() {
       </div>
       <div>
         <label for="jabatan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis</label>
-        <input v-model="jabatan[1]" type="text" id="jabatan" name="jabatan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Epidemolog" required>
+        <input v-model="jabatan[1]" type="text" id="jabatan" name="jabatan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Epidemolog Kesehatan" required>
       </div>
     </div>
     <div v-if="multy" class="grid gap-6 mb-6 md:grid-cols-2">
@@ -65,10 +65,10 @@ async function download() {
       </div>
       <div>
         <label for="jabatan2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis (2)</label>
-        <input v-model="jabatan[2]" type="text" id="jabatan2" name="jabatan2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Staff" required>
+        <input v-model="jabatan[2]" type="text" id="jabatan2" name="jabatan2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Perekam Medis" required>
       </div>
     </div>
-    
+
     <div class="flex justify-center">
       <button @click="isMulty" class="dark:bg-gray-700 dark:text-gray-50 bg-gray-50 text-gray-700">{{ multy ? 1 : 2}} Orang</button>
     </div>
@@ -77,16 +77,16 @@ async function download() {
       <div class="mb-6">
         <label for="tanggal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal</label>
         <VueDatePicker id="tanggal" name="tanggal" v-model="tanggal" text-input multi-dates :enable-time-picker="false" auto-apply :close-on-auto-apply="false" placeholder="mm/dd/yyyyy;" required/>
-      </div> 
+      </div>
       <div class="mb-6">
         <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
         <input v-model="alamat" type="text" id="alamat" name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Desa Branjang" required>
       </div>
     </div>
-    
+
     <div class="mb-6">
       <label for="tujuan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tujuan</label>
-      <input v-model="tujuan" type="text" id="tujuan" name="tujuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pemantauan Jentik Nyamuk" required>
+      <input v-model="tujuan" type="text" id="tujuan" name="tujuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pengendalian Vektor PSN" required>
     </div>
     <button @click="download" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buat</button>
   </form>
