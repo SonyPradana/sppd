@@ -7,18 +7,18 @@ import 'dayjs/locale/id'
 dayjs.locale('id')
 
 /**
- * 
- * @param {object} dates 
- * @param {object} data 
+ *
+ * @param {object} dates
+ * @param {object} data
  */
 async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   if (dates._rawValue === null || dates._rawValue === undefined || dates._rawValue === []) {
     return
   }
-  
+
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(await getResponseAsBuffer(excel))
-  
+
   dates._rawValue.forEach(async date => {
     await create(workbook, date, {nama, nip, golongan, jabatan, tujuan, alamat})
   })
@@ -27,15 +27,15 @@ async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   workbook.removeWorksheet(workbook.getWorksheet('surat_tugas').id);
   workbook.removeWorksheet(workbook.getWorksheet('sppd_depan').id);
   workbook.removeWorksheet(workbook.getWorksheet('sppd_belakang').id);
-  
+
   const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   })
-  
+
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `sppd ${nama[1]}`
+  link.download = `[sppd] ${tujuan} - ${snakeCase(nama[1])}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -43,10 +43,10 @@ async function save(dates, {nama, nip, golongan, jabatan, tujuan, alamat}) {
 
 /**
  * Create sheat from workbook
- * 
- * @param {ExcelJS.Workbook} workbook 
- * @param {Date} tanggal 
- * @param {object} data 
+ *
+ * @param {ExcelJS.Workbook} workbook
+ * @param {Date} tanggal
+ * @param {object} data
  */
 async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, alamat}) {
   const short_date = dayjs(tanggal).format('D-M-YYYY')
@@ -59,12 +59,12 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
   ws.getCell('B4').value = jabatan[1] ?? ''
   ws.getCell('B6').value = tujuan ?? ''
   ws.getCell('B7').value = alamat ?? ''
-  // 
+  //
   ws.getCell('C1').value = nama[2] ?? ''
   ws.getCell('C2').value = nip[2] ?? ''
   ws.getCell('C3').value = golongan[2] ?? ''
   ws.getCell('C4').value = jabatan[2] ?? ''
-  
+
   // cp surat tugas
   const surat_tugas = workbook.getWorksheet('surat_tugas')
   let cp_surat_tugas = workbook.addWorksheet('cp')
@@ -105,6 +105,19 @@ async function create(workbook, tanggal, {nama, nip, golongan, jabatan, tujuan, 
   cp_sppd_belakang.name = `sppd_belakang ${short_date}`;
   cp_sppd_belakang.getCell('F7').value = date
   cp_sppd_belakang.getCell('F7').numFmt = '[$-id-ID]dd mmmm yyyy;@'
+}
+
+/**
+ * @param {string} title
+ *
+ * @return string
+ */
+function snakeCase(title) {
+  return title.replace(/[.,]/g, "")
+    .replace(/\W+/g, " ")
+    .split(/ |\B(?=[A-Z])/)
+    .map(word => word.toLowerCase())
+    .join('_')
 }
 
 export {
