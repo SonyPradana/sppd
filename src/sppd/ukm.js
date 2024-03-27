@@ -3,6 +3,7 @@ import excel from '../assets/sppd.xlsx'
 import dayjs from 'dayjs'
 import { getResponseAsBuffer } from './buffer'
 import 'dayjs/locale/id'
+import * as style from './ukm.border'
 
 dayjs.locale('id')
 
@@ -25,12 +26,12 @@ async function save(dates, { nama, nip, golongan, jabatan, tujuan, alamat }) {
 
     dates._rawValue.forEach(async date => {
         await createWorksheet(workbook, date, {
-        nama,
-        nip,
-        golongan,
-        jabatan,
-        tujuan,
-        alamat,
+            nama,
+            nip,
+            golongan,
+            jabatan,
+            tujuan,
+            alamat,
         })
     })
 
@@ -138,6 +139,8 @@ function createSppdDepanWorksheet(workbook, short_date, date) {
     cp_sppd_depan.name = `sppd_depan ${short_date}`
     cp_sppd_depan.getCell('D22').value = date
     cp_sppd_depan.getCell('D22').numFmt = '[$-id-ID]dd mmmm yyyy;@'
+    // fix boder not render as well
+    style.styleSppdDepanWorksheet(cp_sppd_depan)
 }
 
 /**
@@ -155,8 +158,11 @@ function createSppdBelakangWorksheet(workbook, short_date, date) {
         mergeCells: sppd_belakang.model.merges,
     })
     cp_sppd_belakang.name = `sppd_belakang ${short_date}`
-    cp_sppd_belakang.getCell('F7').value = date
-    cp_sppd_belakang.getCell('F7').numFmt = '[$-id-ID]dd mmmm yyyy;@'
+    cp_sppd_belakang.getCell('F7').value  = ': ' + date
+    cp_sppd_belakang.getCell('D13').value = date
+    cp_sppd_belakang.getCell('F7').numFmt = ': [$-id-ID]dd mmmm yyyy;@'
+    // fix boder not render as well
+    style.styleSppdBelakangWorksheet(cp_sppd_belakang)
 }
 
 /**
