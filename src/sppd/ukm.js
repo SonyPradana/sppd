@@ -24,7 +24,7 @@ async function save(dates, { nama, nip, golongan, jabatan, tujuan, alamat }) {
     const workbook = new ExcelJS.Workbook()
     await workbook.xlsx.load(await getResponseAsBuffer(excel))
 
-    dates._rawValue.forEach(async date => {
+    for (const date of dates._rawValue) {
         await createWorksheet(workbook, date, {
             nama,
             nip,
@@ -33,7 +33,7 @@ async function save(dates, { nama, nip, golongan, jabatan, tujuan, alamat }) {
             tujuan,
             alamat,
         })
-    })
+    }
 
     // flush
     workbook.removeWorksheet(workbook.getWorksheet('surat_tugas').id)
